@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useRef, useState } from 'react';
 import { ImageInput } from '@/components/ImageInput';
+import { useT } from '@/i18n/client';
 import type { Comic, ComicPage } from '@/data/comics';
 
 type Props = {
@@ -15,6 +16,7 @@ const inputCls =
   'w-full bg-paper border border-ink/15 rounded-lg px-3 py-2 focus:outline-none focus:border-accent placeholder:text-ink/40';
 
 export function ComicForm({ initial, mode }: Props) {
+  const t = useT();
   const router = useRouter();
   const [title, setTitle] = useState(initial?.title ?? '');
   const [author, setAuthor] = useState(initial?.author ?? '');
@@ -58,12 +60,12 @@ export function ComicForm({ initial, mode }: Props) {
         form.append('file', file);
         const res = await fetch('/api/upload', { method: 'POST', body: form });
         const data = await res.json();
-        if (!res.ok) throw new Error(data.error || 'Ошибка загрузки');
+        if (!res.ok) throw new Error(data.error || t('form.errorGeneric'));
         uploaded.push({ src: data.url });
       }
       setPages((prev) => [...prev, ...uploaded]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка');
+      setError(err instanceof Error ? err.message : t('form.errorGeneric'));
     } finally {
       setBulkBusy(false);
       if (bulkRef.current) bulkRef.current.value = '';
@@ -77,7 +79,7 @@ export function ComicForm({ initial, mode }: Props) {
     try {
       const tags = tagsText
         .split(',')
-        .map((t) => t.trim())
+        .map((tag) => tag.trim())
         .filter(Boolean);
       const payload = {
         title,
@@ -96,11 +98,11 @@ export function ComicForm({ initial, mode }: Props) {
         body: JSON.stringify(payload)
       });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Ошибка');
+      if (!res.ok) throw new Error(data.error || t('form.errorGeneric'));
       router.push('/admin');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка');
+      setError(err instanceof Error ? err.message : t('form.errorGeneric'));
     } finally {
       setBusy(false);
     }
@@ -108,15 +110,16 @@ export function ComicForm({ initial, mode }: Props) {
 
   async function onDelete() {
     if (!initial) return;
-    if (!confirm(`Удалить «${initial.title}»?`)) return;
+    const confirmMessage = t('form.confirmDelete', { title: initial.title });
+    if (!confirm(confirmMessage)) return;
     setBusy(true);
     try {
       const res = await fetch(`/api/comics/${initial.slug}`, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Не удалось удалить');
+      if (!res.ok) throw new Error(t('form.deleteFailed'));
       router.push('/admin');
       router.refresh();
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка');
+      setError(err instanceof Error ? err.message : t('form.errorGeneric'));
       setBusy(false);
     }
   }
@@ -127,7 +130,7 @@ export function ComicForm({ initial, mode }: Props) {
         <div className="space-y-4">
           <div>
             <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
-              Название
+              {t('form.title')}
             </label>
             <input
               value={title}
@@ -139,7 +142,7 @@ export function ComicForm({ initial, mode }: Props) {
           <div className="grid grid-cols-2 gap-3">
             <div>
               <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
-                Автор
+                {t('form.author')}
               </label>
               <input
                 value={author}
@@ -149,7 +152,7 @@ export function ComicForm({ initial, mode }: Props) {
             </div>
             <div>
               <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
-                Год
+                {t('form.year')}
               </label>
               <input
                 type="number"
@@ -161,7 +164,7 @@ export function ComicForm({ initial, mode }: Props) {
           </div>
           <div>
             <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
-              Описание
+              {t('form.description')}
             </label>
             <textarea
               value={description}
@@ -172,26 +175,26 @@ export function ComicForm({ initial, mode }: Props) {
           </div>
           <div>
             <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
-              Теги (через запятую)
+              {t('form.tags')}
             </label>
             <input
               value={tagsText}
               onChange={(e) => setTagsText(e.target.value)}
-              placeholder="фэнтези, нуар, для всех"
+              placeholder={t('form.tagsPlaceholder')}
               className={`mt-1 ${inputCls}`}
             />
           </div>
         </div>
 
         <div>
-          <ImageInput value={cover} onChange={setCover} label="Обложка" />
+          <ImageInput value={cover} onChange={setCover} label={t('form.cover')} />
         </div>
       </section>
 
       <section className="space-y-3 bg-paper/60 border border-ink/10 rounded-2xl p-5 shadow-card">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <h2 className="font-display text-2xl font-bold tracking-tight">
-            Страницы ({pages.length})
+            {t('form.pages')} ({pages.length})
           </h2>
           <div className="flex gap-2">
             <button
@@ -200,14 +203,14 @@ export function ComicForm({ initial, mode }: Props) {
               disabled={bulkBusy}
               className="px-3 py-1.5 text-sm rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition disabled:opacity-50"
             >
-              {bulkBusy ? 'Загрузка…' : 'Загрузить пачкой'}
+              {bulkBusy ? t('form.uploading') : t('form.bulkUpload')}
             </button>
             <button
               type="button"
               onClick={addEmptyPage}
               className="px-3 py-1.5 text-sm rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
             >
-              + Пустая
+              {t('form.addEmpty')}
             </button>
           </div>
           <input
@@ -224,7 +227,7 @@ export function ComicForm({ initial, mode }: Props) {
 
         {pages.length === 0 ? (
           <p className="text-ink/40 text-sm py-6 text-center border border-dashed border-ink/15 rounded-xl">
-            Страниц пока нет — добавь через «Загрузить пачкой» или вручную.
+            {t('form.noPages')}
           </p>
         ) : (
           <ul className="space-y-2">
@@ -238,7 +241,7 @@ export function ComicForm({ initial, mode }: Props) {
                     <Image src={p.src} alt="" fill sizes="64px" className="object-cover" />
                   ) : (
                     <div className="absolute inset-0 grid place-items-center text-ink/30 text-[10px]">
-                      пусто
+                      {t('form.empty')}
                     </div>
                   )}
                 </div>
@@ -248,14 +251,14 @@ export function ComicForm({ initial, mode }: Props) {
                     <input
                       value={p.src}
                       onChange={(e) => updatePage(i, { src: e.target.value })}
-                      placeholder="URL картинки или /uploads/…"
+                      placeholder={t('form.pageUrl')}
                       className="flex-1 bg-paper border border-ink/15 rounded-lg px-2 py-1 text-sm focus:outline-none focus:border-accent placeholder:text-ink/40"
                     />
                   </div>
                   <input
                     value={p.caption ?? ''}
                     onChange={(e) => updatePage(i, { caption: e.target.value })}
-                    placeholder="Подпись (необязательно)"
+                    placeholder={t('form.pageCaption')}
                     className="w-full bg-paper border border-ink/15 rounded-lg px-2 py-1 text-xs focus:outline-none focus:border-accent placeholder:text-ink/40"
                   />
                 </div>
@@ -265,7 +268,7 @@ export function ComicForm({ initial, mode }: Props) {
                     onClick={() => movePage(i, -1)}
                     disabled={i === 0}
                     className="text-xs w-7 h-7 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent disabled:opacity-30"
-                    aria-label="Выше"
+                    aria-label={t('form.moveUp')}
                   >
                     ↑
                   </button>
@@ -274,7 +277,7 @@ export function ComicForm({ initial, mode }: Props) {
                     onClick={() => movePage(i, 1)}
                     disabled={i === pages.length - 1}
                     className="text-xs w-7 h-7 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent disabled:opacity-30"
-                    aria-label="Ниже"
+                    aria-label={t('form.moveDown')}
                   >
                     ↓
                   </button>
@@ -282,7 +285,7 @@ export function ComicForm({ initial, mode }: Props) {
                     type="button"
                     onClick={() => removePage(i)}
                     className="text-xs w-7 h-7 rounded-full bg-paper border border-ink/15 hover:border-rose-400 hover:text-rose-500"
-                    aria-label="Удалить"
+                    aria-label={t('form.deletePage')}
                   >
                     ×
                   </button>
@@ -305,7 +308,7 @@ export function ComicForm({ initial, mode }: Props) {
           disabled={busy}
           className="px-5 py-2 rounded-full bg-accent text-paper font-medium hover:opacity-90 transition disabled:opacity-50 shadow-card"
         >
-          {busy ? 'Сохраняю…' : mode === 'create' ? 'Создать' : 'Сохранить'}
+          {busy ? t('form.saving') : mode === 'create' ? t('form.create') : t('form.save')}
         </button>
         {mode === 'edit' && (
           <button
@@ -314,7 +317,7 @@ export function ComicForm({ initial, mode }: Props) {
             disabled={busy}
             className="px-4 py-2 rounded-full bg-paper border border-ink/15 hover:border-rose-400 hover:text-rose-500 transition disabled:opacity-50"
           >
-            Удалить
+            {t('form.delete')}
           </button>
         )}
         <button
@@ -322,7 +325,7 @@ export function ComicForm({ initial, mode }: Props) {
           onClick={() => router.push('/admin')}
           className="ml-auto text-sm text-ink/60 hover:text-ink"
         >
-          Отмена
+          {t('form.cancel')}
         </button>
       </div>
     </form>

@@ -2,9 +2,11 @@
 
 import Image from 'next/image';
 import { useCallback, useEffect, useRef, useState } from 'react';
+import { useT } from '@/i18n/client';
 import type { Comic } from '@/data/comics';
 
 export function ComicReader({ comic }: { comic: Comic }) {
+  const t = useT();
   const [index, setIndex] = useState(0);
   const [direction, setDirection] = useState<1 | -1>(1);
   const touchStart = useRef<number | null>(null);
@@ -37,7 +39,7 @@ export function ComicReader({ comic }: { comic: Comic }) {
     <div className="space-y-4">
       <div className="flex items-center justify-between gap-3">
         <div className="text-sm text-ink/60">
-          Страница <span className="text-ink font-medium">{index + 1}</span> / {total}
+          {t('reader.pageLabel')} <span className="text-ink font-medium">{index + 1}</span> / {total}
         </div>
         <div className="h-1 flex-1 mx-3 bg-ink/10 rounded-full overflow-hidden">
           <div
@@ -50,7 +52,7 @@ export function ComicReader({ comic }: { comic: Comic }) {
             onClick={() => go(-1)}
             disabled={index === 0}
             className="w-9 h-9 rounded-full border border-ink/15 bg-paper disabled:opacity-30 hover:border-accent hover:text-accent transition"
-            aria-label="Назад"
+            aria-label={t('reader.prev')}
           >
             ←
           </button>
@@ -58,7 +60,7 @@ export function ComicReader({ comic }: { comic: Comic }) {
             onClick={() => go(1)}
             disabled={index === total - 1}
             className="w-9 h-9 rounded-full border border-ink/15 bg-paper disabled:opacity-30 hover:border-accent hover:text-accent transition"
-            aria-label="Вперёд"
+            aria-label={t('reader.next')}
           >
             →
           </button>
@@ -86,7 +88,7 @@ export function ComicReader({ comic }: { comic: Comic }) {
           >
             <Image
               src={page.src}
-              alt={`${comic.title} — стр. ${index + 1}`}
+              alt={`${comic.title} — ${t('reader.pageLabel')} ${index + 1}`}
               fill
               priority={index < 2}
               sizes="(max-width: 768px) 100vw, 640px"
@@ -97,12 +99,12 @@ export function ComicReader({ comic }: { comic: Comic }) {
           <button
             onClick={() => go(-1)}
             className="absolute inset-y-0 left-0 w-1/3 cursor-w-resize"
-            aria-label="Предыдущая страница"
+            aria-label={t('reader.prevAria')}
           />
           <button
             onClick={() => go(1)}
             className="absolute inset-y-0 right-0 w-1/3 cursor-e-resize"
-            aria-label="Следующая страница"
+            aria-label={t('reader.nextAria')}
           />
         </div>
 

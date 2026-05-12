@@ -2,6 +2,7 @@
 
 import Image from 'next/image';
 import { useRef, useState } from 'react';
+import { useT } from '@/i18n/client';
 
 type Props = {
   value: string;
@@ -10,7 +11,8 @@ type Props = {
   aspect?: string;
 };
 
-export function ImageInput({ value, onChange, label = 'Изображение', aspect = 'aspect-[3/4]' }: Props) {
+export function ImageInput({ value, onChange, label, aspect = 'aspect-[3/4]' }: Props) {
+  const t = useT();
   const fileRef = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -23,10 +25,10 @@ export function ImageInput({ value, onChange, label = 'Изображение', 
       form.append('file', file);
       const res = await fetch('/api/upload', { method: 'POST', body: form });
       const data = await res.json();
-      if (!res.ok) throw new Error(data.error || 'Ошибка загрузки');
+      if (!res.ok) throw new Error(data.error || t('form.errorGeneric'));
       onChange(data.url);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Ошибка');
+      setError(err instanceof Error ? err.message : t('form.errorGeneric'));
     } finally {
       setBusy(false);
       if (fileRef.current) fileRef.current.value = '';
@@ -35,7 +37,9 @@ export function ImageInput({ value, onChange, label = 'Изображение', 
 
   return (
     <div className="space-y-2">
-      <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">{label}</label>
+      <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
+        {label ?? t('form.cover')}
+      </label>
       <div className="flex gap-3 items-start">
         <div
           className={`relative ${aspect} w-28 shrink-0 rounded-xl border border-ink/15 overflow-hidden bg-mist`}
@@ -44,7 +48,7 @@ export function ImageInput({ value, onChange, label = 'Изображение', 
             <Image src={value} alt="" fill sizes="112px" className="object-cover" />
           ) : (
             <div className="absolute inset-0 grid place-items-center text-ink/30 text-xs">
-              нет
+              {t('form.none')}
             </div>
           )}
         </div>
@@ -52,7 +56,7 @@ export function ImageInput({ value, onChange, label = 'Изображение', 
           <input
             value={value}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="URL или /uploads/…"
+            placeholder={t('form.imagePlaceholder')}
             className="w-full bg-paper border border-ink/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent placeholder:text-ink/40"
           />
           <div className="flex gap-2">
@@ -62,7 +66,7 @@ export function ImageInput({ value, onChange, label = 'Изображение', 
               disabled={busy}
               className="px-3 py-1.5 text-sm rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition disabled:opacity-50"
             >
-              {busy ? 'Загрузка…' : 'Загрузить файл'}
+              {busy ? t('form.uploading') : t('form.uploadFile')}
             </button>
             {value && (
               <button
@@ -70,7 +74,7 @@ export function ImageInput({ value, onChange, label = 'Изображение', 
                 onClick={() => onChange('')}
                 className="px-3 py-1.5 text-sm rounded-full bg-paper border border-ink/15 hover:border-rose-400 hover:text-rose-500 transition"
               >
-                Очистить
+                {t('form.clear')}
               </button>
             )}
           </div>

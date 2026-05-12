@@ -1,37 +1,37 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { listComics } from '@/data/store';
+import { getDict } from '@/i18n/server';
 
 export const dynamic = 'force-dynamic';
 
 export default async function AdminPage() {
   const comics = await listComics();
+  const { t } = await getDict();
 
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="font-display text-4xl font-bold tracking-tight">Админка</h1>
-          <p className="text-ink/50 text-sm mt-1">
-            Без авторизации. Просто добавляй, редактируй и удаляй.
-          </p>
+          <h1 className="font-display text-4xl font-bold tracking-tight">{t('admin.title')}</h1>
+          <p className="text-ink/50 text-sm mt-1">{t('admin.subtitle')}</p>
         </div>
         <Link
           href="/admin/new"
           className="px-4 py-2 rounded-full bg-accent text-paper font-medium hover:opacity-90 transition shadow-card"
         >
-          + Новый комикс
+          {t('admin.newComic')}
         </Link>
       </header>
 
       {comics.length === 0 ? (
         <div className="text-center py-16 bg-paper/60 border border-ink/10 rounded-2xl shadow-card">
-          <p className="text-ink/60 mb-4">Ни одного комикса.</p>
+          <p className="text-ink/60 mb-4">{t('admin.empty')}</p>
           <Link
             href="/admin/new"
             className="inline-block px-4 py-2 rounded-full bg-accent text-paper font-medium hover:opacity-90 transition shadow-card"
           >
-            Создать первый →
+            {t('admin.createFirst')}
           </Link>
         </div>
       ) : (
@@ -45,10 +45,11 @@ export default async function AdminPage() {
               </div>
               <div className="flex-1 min-w-0">
                 <div className="font-display text-lg font-bold truncate">
-                  {c.title || '— без названия —'}
+                  {c.title || t('admin.untitled')}
                 </div>
                 <div className="text-xs text-ink/50 truncate">
-                  {c.author || '—'} · {c.year} · {c.pages.length} стр · {c.tags.length} тегов
+                  {c.author || '—'} · {c.year} · {c.pages.length} {t('admin.pagesShort')} ·{' '}
+                  {c.tags.length} {t('admin.tagsShort')}
                 </div>
               </div>
               <div className="flex gap-2 shrink-0">
@@ -56,13 +57,13 @@ export default async function AdminPage() {
                   href={`/comics/${c.slug}`}
                   className="text-sm px-3 py-1 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
                 >
-                  Открыть
+                  {t('admin.open')}
                 </Link>
                 <Link
                   href={`/admin/edit/${c.slug}`}
                   className="text-sm px-3 py-1 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
                 >
-                  Править
+                  {t('admin.edit')}
                 </Link>
               </div>
             </li>

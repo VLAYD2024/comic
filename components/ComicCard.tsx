@@ -1,8 +1,12 @@
+'use client';
+
 import Image from 'next/image';
 import Link from 'next/link';
+import { useT } from '@/i18n/client';
 import type { Comic } from '@/data/comics';
 
 export function ComicCard({ comic }: { comic: Comic }) {
+  const t = useT();
   return (
     <Link
       href={`/comics/${comic.slug}`}
@@ -19,7 +23,7 @@ export function ComicCard({ comic }: { comic: Comic }) {
           />
         ) : (
           <div className="absolute inset-0 grid place-items-center text-ink/30 font-display text-xl">
-            нет обложки
+            {t('card.noCover')}
           </div>
         )}
         <span className="absolute top-2 left-2 bg-accent text-paper font-display text-xs tracking-wide px-2 py-0.5 rounded-full shadow-card">
@@ -30,12 +34,12 @@ export function ComicCard({ comic }: { comic: Comic }) {
         <h3 className="font-display text-xl leading-tight font-bold">{comic.title}</h3>
         <p className="text-xs text-ink/60 mb-2">{comic.author}</p>
         <div className="flex flex-wrap gap-1">
-          {comic.tags.slice(0, 3).map((t) => (
+          {comic.tags.slice(0, 3).map((tag) => (
             <span
-              key={t}
+              key={tag}
               className="text-[10px] uppercase tracking-wider bg-sky text-ink/70 px-1.5 py-0.5 rounded-full"
             >
-              {t}
+              {tag}
             </span>
           ))}
         </div>

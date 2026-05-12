@@ -1,5 +1,7 @@
 'use client';
 
+import { useT } from '@/i18n/client';
+
 type Props = {
   tags: string[];
   active: string | null;
@@ -7,6 +9,7 @@ type Props = {
 };
 
 export function TagFilter({ tags, active, onChange }: Props) {
+  const t = useT();
   return (
     <div className="flex flex-wrap gap-2">
       <button
@@ -17,7 +20,7 @@ export function TagFilter({ tags, active, onChange }: Props) {
             : 'bg-paper/60 border-ink/15 text-ink/70 hover:border-accent hover:text-ink'
         }`}
       >
-        Все
+        {t('tags.all')}
       </button>
       {tags.map((tag) => {
         const isActive = active === tag;

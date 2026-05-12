@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useMemo, useState } from 'react';
 import { ComicCard } from '@/components/ComicCard';
 import { TagFilter } from '@/components/TagFilter';
+import { useT } from '@/i18n/client';
 import type { Comic } from '@/data/comics';
 
 type Props = {
@@ -12,6 +13,7 @@ type Props = {
 };
 
 export function CatalogView({ comics, tags }: Props) {
+  const t = useT();
   const [activeTag, setActiveTag] = useState<string | null>(null);
   const [query, setQuery] = useState('');
 
@@ -32,21 +34,19 @@ export function CatalogView({ comics, tags }: Props) {
     <div className="space-y-8">
       <section className="flex flex-col gap-3">
         <h1 className="font-display text-5xl md:text-6xl tracking-tight font-bold">
-          Сборник <span className="text-accent">комиксов</span>
+          {t('catalog.titleStart')} <span className="text-accent">{t('catalog.titleAccent')}</span>
         </h1>
-        <p className="text-ink/60 max-w-2xl">
-          Выбирай по настроению, листай страницы стрелками, кликом или свайпом.
-        </p>
+        <p className="text-ink/60 max-w-2xl">{t('catalog.description')}</p>
       </section>
 
       {comics.length === 0 ? (
         <section className="text-center py-16 bg-paper/60 border border-ink/10 rounded-2xl shadow-card">
-          <p className="text-ink/60 mb-4">Пока ни одного комикса.</p>
+          <p className="text-ink/60 mb-4">{t('catalog.empty')}</p>
           <Link
             href="/admin"
             className="inline-block px-4 py-2 rounded-full bg-accent text-paper font-medium hover:opacity-90 transition shadow-card"
           >
-            Добавить первый →
+            {t('catalog.addFirst')}
           </Link>
         </section>
       ) : (
@@ -56,13 +56,13 @@ export function CatalogView({ comics, tags }: Props) {
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="Поиск по названию или автору…"
+              placeholder={t('catalog.searchPlaceholder')}
               className="bg-paper border border-ink/15 rounded-full px-4 py-2 text-sm focus:outline-none focus:border-accent w-full md:w-64 placeholder:text-ink/40"
             />
           </section>
 
           {filtered.length === 0 ? (
-            <p className="text-ink/50 py-10 text-center">Ничего не нашлось.</p>
+            <p className="text-ink/50 py-10 text-center">{t('catalog.noResults')}</p>
           ) : (
             <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
               {filtered.map((c) => (
