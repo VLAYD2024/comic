@@ -11,14 +11,16 @@ export default async function AdminPage() {
 
   return (
     <div className="space-y-6">
-      <header className="flex items-center justify-between flex-wrap gap-3">
+      <header className="flex items-start sm:items-center justify-between flex-wrap gap-3">
         <div>
-          <h1 className="font-display text-4xl font-bold tracking-tight">{t('admin.title')}</h1>
+          <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+            {t('admin.title')}
+          </h1>
           <p className="text-ink/50 text-sm mt-1">{t('admin.subtitle')}</p>
         </div>
         <Link
           href="/admin/new"
-          className="px-4 py-2 rounded-full bg-accent text-paper font-medium hover:opacity-90 transition shadow-card"
+          className="px-4 py-2 rounded-full bg-accent text-paper font-medium hover:opacity-90 transition shadow-card text-sm sm:text-base whitespace-nowrap"
         >
           {t('admin.newComic')}
         </Link>
@@ -37,31 +39,34 @@ export default async function AdminPage() {
       ) : (
         <ul className="divide-y divide-ink/10 bg-paper/60 border border-ink/10 rounded-2xl overflow-hidden shadow-card">
           {comics.map((c) => (
-            <li key={c.slug} className="flex items-center gap-4 p-3 hover:bg-sky/60 transition">
-              <div className="relative w-12 h-16 shrink-0 rounded-lg overflow-hidden bg-mist border border-ink/10">
+            <li
+              key={c.slug}
+              className="flex items-center gap-3 sm:gap-4 p-3 hover:bg-sky/60 transition"
+            >
+              <div className="relative w-10 h-14 sm:w-12 sm:h-16 shrink-0 rounded-lg overflow-hidden bg-mist border border-ink/10">
                 {c.cover && (
                   <Image src={c.cover} alt="" fill sizes="48px" className="object-cover" />
                 )}
               </div>
               <div className="flex-1 min-w-0">
-                <div className="font-display text-lg font-bold truncate">
+                <div className="font-display text-base sm:text-lg font-bold truncate">
                   {c.title || t('admin.untitled')}
                 </div>
-                <div className="text-xs text-ink/50 truncate">
+                <div className="text-[11px] sm:text-xs text-ink/50 truncate">
                   {c.author || '—'} · {c.year} · {c.pages.length} {t('admin.pagesShort')} ·{' '}
                   {c.tags.length} {t('admin.tagsShort')}
                 </div>
               </div>
-              <div className="flex gap-2 shrink-0">
+              <div className="flex gap-1.5 sm:gap-2 shrink-0">
                 <Link
                   href={`/comics/${c.slug}`}
-                  className="text-sm px-3 py-1 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
+                  className="text-xs sm:text-sm px-2.5 sm:px-3 py-1 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
                 >
                   {t('admin.open')}
                 </Link>
                 <Link
                   href={`/admin/edit/${c.slug}`}
-                  className="text-sm px-3 py-1 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
+                  className="text-xs sm:text-sm px-2.5 sm:px-3 py-1 rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition"
                 >
                   {t('admin.edit')}
                 </Link>

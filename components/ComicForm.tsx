@@ -126,7 +126,7 @@ export function ComicForm({ initial, mode }: Props) {
 
   return (
     <form onSubmit={onSubmit} className="space-y-8">
-      <section className="grid md:grid-cols-2 gap-6 bg-paper/60 border border-ink/10 rounded-2xl p-5 shadow-card">
+      <section className="grid md:grid-cols-2 gap-5 md:gap-6 bg-paper/60 border border-ink/10 rounded-2xl p-4 sm:p-5 shadow-card">
         <div className="space-y-4">
           <div>
             <label className="text-xs uppercase tracking-wider text-ink/60 font-medium">
@@ -191,7 +191,7 @@ export function ComicForm({ initial, mode }: Props) {
         </div>
       </section>
 
-      <section className="space-y-3 bg-paper/60 border border-ink/10 rounded-2xl p-5 shadow-card">
+      <section className="space-y-3 bg-paper/60 border border-ink/10 rounded-2xl p-4 sm:p-5 shadow-card">
         <div className="flex items-center justify-between flex-wrap gap-3">
           <h2 className="font-display text-2xl font-bold tracking-tight">
             {t('form.pages')} ({pages.length})

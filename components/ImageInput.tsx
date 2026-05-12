@@ -59,12 +59,12 @@ export function ImageInput({ value, onChange, label, aspect = 'aspect-[3/4]' }: 
             placeholder={t('form.imagePlaceholder')}
             className="w-full bg-paper border border-ink/15 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-accent placeholder:text-ink/40"
           />
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             <button
               type="button"
               onClick={() => fileRef.current?.click()}
               disabled={busy}
-              className="px-3 py-1.5 text-sm rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition disabled:opacity-50"
+              className="px-3 py-1.5 text-xs sm:text-sm rounded-full bg-paper border border-ink/15 hover:border-accent hover:text-accent transition disabled:opacity-50"
             >
               {busy ? t('form.uploading') : t('form.uploadFile')}
             </button>
@@ -72,7 +72,7 @@ export function ImageInput({ value, onChange, label, aspect = 'aspect-[3/4]' }: 
               <button
                 type="button"
                 onClick={() => onChange('')}
-                className="px-3 py-1.5 text-sm rounded-full bg-paper border border-ink/15 hover:border-rose-400 hover:text-rose-500 transition"
+                className="px-3 py-1.5 text-xs sm:text-sm rounded-full bg-paper border border-ink/15 hover:border-rose-400 hover:text-rose-500 transition"
               >
                 {t('form.clear')}
               </button>

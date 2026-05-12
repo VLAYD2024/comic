@@ -9,7 +9,9 @@ export default async function NewComicPage() {
       <Link href="/admin" className="text-sm text-ink/60 hover:text-ink">
         {t('admin.backToList')}
       </Link>
-      <h1 className="font-display text-4xl font-bold tracking-tight">{t('admin.newPageTitle')}</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight">
+        {t('admin.newPageTitle')}
+      </h1>
       <ComicForm mode="create" />
     </div>
   );

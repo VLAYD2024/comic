@@ -33,10 +33,10 @@ export function CatalogView({ comics, tags }: Props) {
   return (
     <div className="space-y-8">
       <section className="flex flex-col gap-3">
-        <h1 className="font-display text-5xl md:text-6xl tracking-tight font-bold">
+        <h1 className="font-display text-3xl sm:text-4xl md:text-6xl tracking-tight font-bold leading-tight">
           {t('catalog.titleStart')} <span className="text-accent">{t('catalog.titleAccent')}</span>
         </h1>
-        <p className="text-ink/60 max-w-2xl">{t('catalog.description')}</p>
+        <p className="text-ink/60 max-w-2xl text-sm sm:text-base">{t('catalog.description')}</p>
       </section>
 
       {comics.length === 0 ? (
@@ -51,7 +51,7 @@ export function CatalogView({ comics, tags }: Props) {
         </section>
       ) : (
         <>
-          <section className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <section className="flex flex-col-reverse md:flex-row md:items-center md:justify-between gap-3 md:gap-4">
             <TagFilter tags={tags} active={activeTag} onChange={setActiveTag} />
             <input
               value={query}
@@ -64,7 +64,7 @@ export function CatalogView({ comics, tags }: Props) {
           {filtered.length === 0 ? (
             <p className="text-ink/50 py-10 text-center">{t('catalog.noResults')}</p>
           ) : (
-            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            <section className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-5">
               {filtered.map((c) => (
                 <ComicCard key={c.slug} comic={c} />
               ))}

@@ -27,15 +27,17 @@ export default async function ComicPage({ params }: { params: Params }) {
         {t('comic.back')}
       </Link>
 
-      <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-4 border-b border-ink/10 pb-5">
+      <header className="flex flex-col md:flex-row md:items-end md:justify-between gap-3 md:gap-4 border-b border-ink/10 pb-4 sm:pb-5">
         <div>
-          <h1 className="font-display text-4xl md:text-5xl font-bold tracking-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-5xl font-bold tracking-tight leading-tight">
             {comic.title}
           </h1>
-          <p className="text-ink/60 mt-1">
+          <p className="text-ink/60 mt-1 text-sm sm:text-base">
             {comic.author} · {comic.year}
           </p>
-          <p className="text-ink/80 mt-3 max-w-2xl">{comic.description}</p>
+          <p className="text-ink/80 mt-2 sm:mt-3 max-w-2xl text-sm sm:text-base">
+            {comic.description}
+          </p>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {comic.tags.map((tag) => (

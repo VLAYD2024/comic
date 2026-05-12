@@ -37,21 +37,15 @@ export function ComicReader({ comic }: { comic: Comic }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex items-center justify-between gap-3">
-        <div className="text-sm text-ink/60">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="text-sm text-ink/60 order-1">
           {t('reader.pageLabel')} <span className="text-ink font-medium">{index + 1}</span> / {total}
         </div>
-        <div className="h-1 flex-1 mx-3 bg-ink/10 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-accent transition-all duration-300"
-            style={{ width: `${progress}%` }}
-          />
-        </div>
-        <div className="flex gap-2">
+        <div className="flex gap-2 order-2 sm:order-3 ml-auto">
           <button
             onClick={() => go(-1)}
             disabled={index === 0}
-            className="w-9 h-9 rounded-full border border-ink/15 bg-paper disabled:opacity-30 hover:border-accent hover:text-accent transition"
+            className="w-11 h-11 sm:w-9 sm:h-9 rounded-full border border-ink/15 bg-paper disabled:opacity-30 hover:border-accent hover:text-accent transition"
             aria-label={t('reader.prev')}
           >
             ←
@@ -59,11 +53,17 @@ export function ComicReader({ comic }: { comic: Comic }) {
           <button
             onClick={() => go(1)}
             disabled={index === total - 1}
-            className="w-9 h-9 rounded-full border border-ink/15 bg-paper disabled:opacity-30 hover:border-accent hover:text-accent transition"
+            className="w-11 h-11 sm:w-9 sm:h-9 rounded-full border border-ink/15 bg-paper disabled:opacity-30 hover:border-accent hover:text-accent transition"
             aria-label={t('reader.next')}
           >
             →
           </button>
+        </div>
+        <div className="h-1 w-full sm:flex-1 sm:mx-3 bg-ink/10 rounded-full overflow-hidden order-3 sm:order-2">
+          <div
+            className="h-full bg-accent transition-all duration-300"
+            style={{ width: `${progress}%` }}
+          />
         </div>
       </div>
 

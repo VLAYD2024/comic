@@ -19,7 +19,9 @@ export default async function EditComicPage({ params }: { params: Params }) {
       <Link href="/admin" className="text-sm text-ink/60 hover:text-ink">
         {t('admin.backToList')}
       </Link>
-      <h1 className="font-display text-4xl font-bold tracking-tight">{comic.title}</h1>
+      <h1 className="font-display text-3xl sm:text-4xl font-bold tracking-tight leading-tight">
+        {comic.title}
+      </h1>
       <p className="text-ink/50 text-sm">
         {t('admin.slugLabel')} <span className="text-ink/80 font-mono">{comic.slug}</span>
       </p>
