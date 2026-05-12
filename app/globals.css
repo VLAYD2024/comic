@@ -1,0 +1,23 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,800&family=Inter:wght@400;500;600;700&display=swap');
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body {
+  background: linear-gradient(180deg, #eaf3fc 0%, #dce8f4 100%);
+  background-attachment: fixed;
+  min-height: 100vh;
+  color: #1f3a5f;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+.halftone {
+  background-image: radial-gradient(rgba(31, 58, 95, 0.05) 1px, transparent 1px);
+  background-size: 8px 8px;
+}
